@@ -1,571 +1,455 @@
+import { v4 as uuidv4 } from 'uuid';
 
-import { ProgressionPath } from '../types';
+export interface Progression {
+  id: string;
+  name: string;
+  description: string;
+  paths: ProgressionPath[];
+}
 
-export const progressions: ProgressionPath[] = [
+export interface ProgressionPath {
+  id: string;
+  name: string;
+  description: string;
+  levels: Exercise[];
+}
+
+export interface Exercise {
+  id: string;
+  name: string;
+  description: string;
+  videoUrl?: string;
+  focus?: string[];
+  muscles?: string[];
+  equipment?: string[];
+}
+
+export interface WorkoutTemplate {
+  id: string;
+  name: string;
+  description: string;
+  exercises: {
+    exerciseId: string;
+    name: string;
+    progressionId?: string;
+  }[];
+}
+
+// Mock Data
+export const progressions: Progression[] = [
   {
-    id: 'pull-ups',
-    name: 'Pull-up Progression',
-    category: 'Pull',
-    description: 'Master the pull-up from dead hang to muscle-up',
-    steps: [
-      {
-        id: 'negative-pull-ups',
-        name: 'Negative Pull-ups',
-        description: 'Jump to the top position and slowly lower yourself down',
-        difficulty: 'Beginner',
-        tips: ['Focus on a slow descent', 'Aim for 5-10 second lowering phase']
-      },
-      {
-        id: 'assisted-pull-ups',
-        name: 'Assisted Pull-ups',
-        description: 'Use resistance bands or assisted machine to help with pull-ups',
-        difficulty: 'Beginner',
-        tips: ['Gradually decrease assistance', 'Focus on proper form']
-      },
-      {
-        id: 'chin-ups',
-        name: 'Chin-ups',
-        description: 'Palms facing you, pull yourself up to the bar',
-        difficulty: 'Beginner',
-        tips: ['Keep elbows close to body', 'Pull until chin over bar']
-      },
-      {
-        id: 'pull-ups',
-        name: 'Pull-ups',
-        description: 'Palms facing away, pull yourself up to the bar',
-        difficulty: 'Intermediate',
-        tips: ['Engage your lats', 'Keep shoulders down away from ears']
-      },
-      {
-        id: 'weighted-pull-ups',
-        name: 'Weighted Pull-ups',
-        description: 'Pull-ups with additional weight',
-        difficulty: 'Advanced',
-        tips: ['Start with small weight increments', 'Maintain strict form']
-      },
-      {
-        id: 'l-sit-pull-ups',
-        name: 'L-Sit Pull-ups',
-        description: 'Perform pull-ups while holding an L-sit position',
-        difficulty: 'Advanced',
-        tips: ['Keep legs straight and together', 'Maintain the L position throughout']
-      },
-      {
-        id: 'muscle-up',
-        name: 'Muscle-up',
-        description: 'Pull-up transitioning to a dip, ending above the bar',
-        difficulty: 'Elite',
-        tips: ['Explosive pull', 'Practice the transition separately']
-      }
-    ]
-  },
-  {
-    id: 'push-ups',
-    name: 'Push-up Progression',
-    category: 'Push',
-    description: 'Master the push-up from knee to one-arm variations',
-    steps: [
-      {
-        id: 'wall-push-ups',
-        name: 'Wall Push-ups',
-        description: 'Push-ups against a wall',
-        difficulty: 'Beginner',
-        tips: ['Keep body straight', 'Step further from wall to increase difficulty']
-      },
+    id: 'push-up-progression',
+    name: 'Push-Up Progression',
+    description: 'A progression to learn and master the push-up.',
+    paths: [
       {
         id: 'incline-push-ups',
-        name: 'Incline Push-ups',
-        description: 'Push-ups with hands on an elevated surface',
-        difficulty: 'Beginner',
-        tips: ['Lower the incline gradually', 'Keep core engaged']
+        name: 'Incline Push-Ups',
+        description: 'Push-ups performed with hands elevated.',
+        levels: [
+          {
+            id: 'incline-push-up-1',
+            name: 'Incline Push-Up - Wall',
+            description: 'Push-ups against a wall.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: [],
+          },
+          {
+            id: 'incline-push-up-2',
+            name: 'Incline Push-Up - Table',
+            description: 'Push-ups against a table.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: [],
+          },
+        ],
       },
       {
         id: 'knee-push-ups',
-        name: 'Knee Push-ups',
-        description: 'Push-ups from knees instead of toes',
-        difficulty: 'Beginner',
-        tips: ['Keep hips aligned with shoulders', 'Lower chest to ground']
+        name: 'Knee Push-Ups',
+        description: 'Push-ups performed on the knees.',
+        levels: [
+          {
+            id: 'knee-push-up-1',
+            name: 'Knee Push-Up',
+            description: 'Standard knee push-up.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: [],
+          },
+        ],
       },
       {
-        id: 'push-ups',
-        name: 'Push-ups',
-        description: 'Standard push-ups from toes',
-        difficulty: 'Intermediate',
-        tips: ['Keep body in straight line', 'Lower until chest nearly touches ground']
+        id: 'assisted-push-ups',
+        name: 'Assisted Push-Ups',
+        description: 'Push-ups with resistance bands.',
+        levels: [
+          {
+            id: 'assisted-push-up-1',
+            name: 'Assisted Push-Up - Band',
+            description: 'Push-ups with band assistance.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: ['Resistance Band'],
+          },
+        ],
       },
       {
-        id: 'diamond-push-ups',
-        name: 'Diamond Push-ups',
-        description: 'Push-ups with hands close together forming a diamond',
-        difficulty: 'Intermediate',
-        tips: ['Keep elbows close to body', 'Focus on tricep engagement']
+        id: 'standard-push-ups',
+        name: 'Standard Push-Ups',
+        description: 'Classic push-ups on the toes.',
+        levels: [
+          {
+            id: 'standard-push-up-1',
+            name: 'Push-Up',
+            description: 'Regular push-up on the floor.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: [],
+          },
+        ],
       },
       {
         id: 'decline-push-ups',
-        name: 'Decline Push-ups',
-        description: 'Push-ups with feet elevated',
-        difficulty: 'Advanced',
-        tips: ['Higher elevation increases difficulty', 'Maintain straight body line']
+        name: 'Decline Push-Ups',
+        description: 'Push-ups performed with feet elevated.',
+        levels: [
+          {
+            id: 'decline-push-up-1',
+            name: 'Decline Push-Up - Bench',
+            description: 'Push-ups with feet on a bench.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Upper Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major (clavicular head)', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: ['Bench'],
+          },
+        ],
       },
       {
         id: 'archer-push-ups',
-        name: 'Archer Push-ups',
-        description: 'Push-ups where one arm extends sideways while the other bends',
-        difficulty: 'Advanced',
-        tips: ['Fully extend one arm', 'Alternate sides']
+        name: 'Archer Push-Ups',
+        description: 'Push-ups with emphasis on one arm.',
+        levels: [
+          {
+            id: 'archer-push-up-1',
+            name: 'Archer Push-Up',
+            description: 'Push-up variation focusing on one arm at a time.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: [],
+          },
+        ],
       },
       {
-        id: 'one-arm-push-up',
-        name: 'One-arm Push-up',
-        description: 'Push-up using only one arm',
-        difficulty: 'Elite',
-        tips: ['Start with feet wide', 'Progress from archer push-ups']
-      }
-    ]
+        id: 'one-arm-push-ups',
+        name: 'One-Arm Push-Ups',
+        description: 'Advanced push-up performed on a single arm.',
+        levels: [
+          {
+            id: 'one-arm-push-up-1',
+            name: 'One-Arm Push-Up',
+            description: 'Push-up performed using only one arm.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Chest', 'Shoulders', 'Triceps', 'Core'],
+            muscles: ['Pectoralis Major', 'Anterior Deltoid', 'Triceps Brachii', 'Abdominals'],
+            equipment: [],
+          },
+        ],
+      },
+    ],
   },
   {
-    id: 'dips',
-    name: 'Dip Progression',
-    category: 'Push',
-    description: 'Master dips from bench to rings',
-    steps: [
-      {
-        id: 'bench-dips',
-        name: 'Bench Dips',
-        description: 'Dips performed with hands on a bench and feet on floor',
-        difficulty: 'Beginner',
-        tips: ['Keep shoulders down', 'Lower until upper arms are parallel to floor']
-      },
-      {
-        id: 'assisted-dips',
-        name: 'Assisted Dips',
-        description: 'Dips with assistance from bands or machine',
-        difficulty: 'Beginner',
-        tips: ['Decrease assistance gradually', 'Focus on full range of motion']
-      },
-      {
-        id: 'parallel-bar-dips',
-        name: 'Parallel Bar Dips',
-        description: 'Full dips on parallel bars',
-        difficulty: 'Intermediate',
-        tips: ['Lower until shoulders are below elbows', 'Keep slight forward lean']
-      },
-      {
-        id: 'weighted-dips',
-        name: 'Weighted Dips',
-        description: 'Dips with additional weight',
-        difficulty: 'Advanced',
-        tips: ['Add weight gradually', 'Maintain proper form']
-      },
-      {
-        id: 'ring-dips',
-        name: 'Ring Dips',
-        description: 'Dips performed on gymnastics rings',
-        difficulty: 'Advanced',
-        tips: ['Stabilize the rings', 'Turn rings out at top position']
-      },
-      {
-        id: 'korean-dips',
-        name: 'Korean Dips',
-        description: 'Starting from support position, lean forward until shoulders are over hands',
-        difficulty: 'Elite',
-        tips: ['Start with small lean', 'Keep arms straight']
-      }
-    ]
-  },
-  {
-    id: 'squats',
+    id: 'squat-progression',
     name: 'Squat Progression',
-    category: 'Legs',
-    description: 'Develop leg strength from basic to advanced squat variations',
-    steps: [
+    description: 'A progression to learn and master the squat.',
+    paths: [
       {
         id: 'assisted-squats',
         name: 'Assisted Squats',
-        description: 'Squats holding onto support',
-        difficulty: 'Beginner',
-        tips: ['Focus on depth', 'Use less support over time']
+        description: 'Squats performed with assistance.',
+        levels: [
+          {
+            id: 'assisted-squat-1',
+            name: 'Assisted Squat - Chair',
+            description: 'Squats using a chair for assistance.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: ['Chair'],
+          },
+          {
+            id: 'assisted-squat-2',
+            name: 'Assisted Squat - Band',
+            description: 'Squats using a resistance band for assistance.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: ['Resistance Band'],
+          },
+        ],
       },
       {
-        id: 'air-squats',
-        name: 'Air Squats',
-        description: 'Basic bodyweight squats',
-        difficulty: 'Beginner',
-        tips: ['Keep weight in heels', 'Knees track over toes']
+        id: 'bodyweight-squats',
+        name: 'Bodyweight Squats',
+        description: 'Squats performed without any weight.',
+        levels: [
+          {
+            id: 'bodyweight-squat-1',
+            name: 'Bodyweight Squat',
+            description: 'Standard squat without weight.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: [],
+          },
+        ],
       },
       {
-        id: 'split-squats',
-        name: 'Split Squats',
-        description: 'One foot forward, one back, lower into lunge position',
-        difficulty: 'Intermediate',
-        tips: ['Keep front knee over ankle', 'Lower back knee toward ground']
+        id: 'goblet-squats',
+        name: 'Goblet Squats',
+        description: 'Squats performed while holding a weight in front of the chest.',
+        levels: [
+          {
+            id: 'goblet-squat-1',
+            name: 'Goblet Squat - Dumbbell',
+            description: 'Squats holding a dumbbell in front of the chest.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: ['Dumbbell'],
+          },
+          {
+            id: 'goblet-squat-2',
+            name: 'Goblet Squat - Kettlebell',
+            description: 'Squats holding a kettlebell in front of the chest.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: ['Kettlebell'],
+          },
+        ],
       },
       {
-        id: 'bulgarian-split-squats',
-        name: 'Bulgarian Split Squats',
-        description: 'Split squats with rear foot elevated',
-        difficulty: 'Intermediate',
-        tips: ['Find stable platform for rear foot', 'Keep torso upright']
-      },
-      {
-        id: 'shrimp-squats',
-        name: 'Shrimp Squats',
-        description: 'Single-leg squat with rear leg bent and held',
-        difficulty: 'Advanced',
-        tips: ['Hold non-working leg', 'Progress to not holding leg']
+        id: 'jump-squats',
+        name: 'Jump Squats',
+        description: 'Squats that end with a jump.',
+        levels: [
+          {
+            id: 'jump-squat-1',
+            name: 'Jump Squat',
+            description: 'Squat followed by a jump.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings', 'Calves'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings', 'Gastrocnemius'],
+            equipment: [],
+          },
+        ],
       },
       {
         id: 'pistol-squats',
         name: 'Pistol Squats',
-        description: 'Single-leg squat with other leg extended',
-        difficulty: 'Elite',
-        tips: ['Start with support', 'Keep extended leg straight']
-      }
-    ]
+        description: 'Single leg squats.',
+        levels: [
+          {
+            id: 'pistol-squat-1',
+            name: 'Pistol Squat - Assisted',
+            description: 'Single leg squat with assistance.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings', 'Balance'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: [],
+          },
+          {
+            id: 'pistol-squat-2',
+            name: 'Pistol Squat',
+            description: 'Unassisted single leg squat.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Quads', 'Glutes', 'Hamstrings', 'Balance'],
+            muscles: ['Quadriceps', 'Gluteus Maximus', 'Hamstrings'],
+            equipment: [],
+          },
+        ],
+      },
+    ],
   },
   {
-    id: 'handstand',
-    name: 'Handstand Progression',
-    category: 'Balance/Push',
-    description: 'Work toward a freestanding handstand',
-    steps: [
+    id: 'pull-up-progression',
+    name: 'Pull-Up Progression',
+    description: 'A progression to learn and master the pull-up.',
+    paths: [
       {
-        id: 'wall-plank',
-        name: 'Wall Plank',
-        description: 'Face-down incline plank with feet on wall',
-        difficulty: 'Beginner',
-        tips: ['Build up to 60-second hold', 'Keep shoulders active']
+        id: 'vertical-pulls',
+        name: 'Vertical Pulls',
+        description: 'Pulling motions in a vertical plane.',
+        levels: [
+          {
+            id: 'vertical-pull-1',
+            name: 'Vertical Pull - Doorframe',
+            description: 'Pulling using a doorframe.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Doorframe'],
+          },
+        ],
       },
       {
-        id: 'pike-push-ups',
-        name: 'Pike Push-ups',
-        description: 'Push-ups with hips raised and head pointing toward ground',
-        difficulty: 'Beginner',
-        tips: ['Higher pike is harder', 'Focus on shoulder strength']
+        id: 'inverted-rows',
+        name: 'Inverted Rows',
+        description: 'Pulling yourself up to a bar while horizontal.',
+        levels: [
+          {
+            id: 'inverted-row-1',
+            name: 'Inverted Row - Table',
+            description: 'Pulling up to a table edge.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Table'],
+          },
+        ],
       },
       {
-        id: 'wall-walks',
-        name: 'Wall Walks',
-        description: 'Walk feet up wall from push-up position',
-        difficulty: 'Intermediate',
-        tips: ['Walk hands closer to wall', 'Build shoulder endurance']
+        id: 'assisted-pull-ups',
+        name: 'Assisted Pull-Ups',
+        description: 'Pull-ups with assistance.',
+        levels: [
+          {
+            id: 'assisted-pull-up-1',
+            name: 'Assisted Pull-Up - Band',
+            description: 'Pull-ups with band assistance.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Resistance Band'],
+          },
+          {
+            id: 'assisted-pull-up-2',
+            name: 'Assisted Pull-Up - Machine',
+            description: 'Pull-ups using an assisted pull-up machine.',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Assisted Pull-Up Machine'],
+          },
+        ],
       },
       {
-        id: 'wall-handstand',
-        name: 'Wall Handstand',
-        description: 'Handstand with feet resting on wall',
-        difficulty: 'Intermediate',
-        tips: ['Aim for straight line', 'Gentle heel contact with wall']
+        id: 'pull-ups',
+        name: 'Pull-Ups',
+        description: 'Classic pull-ups on a bar.',
+        levels: [
+          {
+            id: 'pull-up-1',
+            name: 'Pull-Up',
+            description: 'Regular pull-up on a bar.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Pull-Up Bar'],
+          },
+        ],
       },
       {
-        id: 'handstand-holds',
-        name: 'Freestanding Handstand',
-        description: 'Handstand without wall support',
-        difficulty: 'Advanced',
-        tips: ['Start with back to wall', 'Practice kick-ups separately']
+        id: 'chin-ups',
+        name: 'Chin-Ups',
+        description: 'Pull-ups with an underhand grip.',
+        levels: [
+          {
+            id: 'chin-up-1',
+            name: 'Chin-Up',
+            description: 'Pull-up with an underhand grip.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii'],
+            equipment: ['Pull-Up Bar'],
+          },
+        ],
       },
       {
-        id: 'handstand-push-ups',
-        name: 'Handstand Push-ups',
-        description: 'Push-ups while in handstand position',
-        difficulty: 'Elite',
-        tips: ['Start with head-supported push-ups', 'Build with negatives']
-      }
-    ]
+        id: 'muscle-ups',
+        name: 'Muscle-Ups',
+        description: 'Advanced move combining pull-up and dip.',
+        levels: [
+          {
+            id: 'muscle-up-1',
+            name: 'Muscle-Up',
+            description: 'Pull-up transitioning into a dip.',
+            videoUrl: 'https://www.youtube.com/watch?v=qF-y-6tK-uk',
+            focus: ['Back', 'Biceps', 'Shoulders', 'Triceps'],
+            muscles: ['Latissimus Dorsi', 'Biceps Brachii', 'Anterior Deltoid', 'Triceps Brachii'],
+            equipment: ['Pull-Up Bar'],
+          },
+        ],
+      },
+    ],
   },
-  {
-    id: 'front-lever',
-    name: 'Front Lever Progression',
-    category: 'Pull',
-    description: 'Develop the strength for a full front lever',
-    steps: [
-      {
-        id: 'hanging-knee-raises',
-        name: 'Hanging Knee Raises',
-        description: 'Hang from bar and raise knees to chest',
-        difficulty: 'Beginner',
-        tips: ['Avoid swinging', 'Control the movement']
-      },
-      {
-        id: 'tuck-front-lever',
-        name: 'Tuck Front Lever',
-        description: 'Front lever position with knees tucked to chest',
-        difficulty: 'Intermediate',
-        tips: ['Keep body horizontal', 'Squeeze shoulder blades']
-      },
-      {
-        id: 'advanced-tuck-front-lever',
-        name: 'Advanced Tuck Front Lever',
-        description: 'Tuck front lever with hips extended',
-        difficulty: 'Intermediate',
-        tips: ['Keep hips level with shoulders', 'Open hip angle']
-      },
-      {
-        id: 'one-leg-front-lever',
-        name: 'One-Leg Front Lever',
-        description: 'Front lever with one leg extended, one tucked',
-        difficulty: 'Advanced',
-        tips: ['Alternate legs', 'Maintain body position']
-      },
-      {
-        id: 'straddle-front-lever',
-        name: 'Straddle Front Lever',
-        description: 'Front lever with legs in straddle position',
-        difficulty: 'Advanced',
-        tips: ['Wide straddle is easier', 'Keep legs straight']
-      },
-      {
-        id: 'full-front-lever',
-        name: 'Full Front Lever',
-        description: 'Full front lever with body and legs extended',
-        difficulty: 'Elite',
-        tips: ['Build with holds and negatives', 'Squeeze everything']
-      }
-    ]
-  },
-  {
-    id: 'planche',
-    name: 'Planche Progression',
-    category: 'Push',
-    description: 'Work toward the full planche',
-    steps: [
-      {
-        id: 'plank',
-        name: 'Plank',
-        description: 'Body straight, supported by forearms and toes',
-        difficulty: 'Beginner',
-        tips: ['Keep body straight', 'Engage core']
-      },
-      {
-        id: 'pseudo-planche-pushups',
-        name: 'Pseudo Planche Push-ups',
-        description: 'Push-ups with hands positioned near hips',
-        difficulty: 'Intermediate',
-        tips: ['Lean forward', 'Fingers point to feet']
-      },
-      {
-        id: 'frog-stand',
-        name: 'Frog Stand',
-        description: 'Balance on hands with knees resting on elbows',
-        difficulty: 'Intermediate',
-        tips: ['Look slightly forward', 'Keep arms straight']
-      },
-      {
-        id: 'tuck-planche',
-        name: 'Tuck Planche',
-        description: 'Planche position with knees tucked toward chest',
-        difficulty: 'Advanced',
-        tips: ['Lean forward', 'Protract shoulders']
-      },
-      {
-        id: 'advanced-tuck-planche',
-        name: 'Advanced Tuck Planche',
-        description: 'Tuck planche with more open hip angle',
-        difficulty: 'Advanced',
-        tips: ['Maintain shoulder position', 'Gradually open hips']
-      },
-      {
-        id: 'straddle-planche',
-        name: 'Straddle Planche',
-        description: 'Planche with legs in straddle position',
-        difficulty: 'Elite',
-        tips: ['Wide straddle is easier', 'Keep legs straight']
-      },
-      {
-        id: 'full-planche',
-        name: 'Full Planche',
-        description: 'Full planche with body and legs extended',
-        difficulty: 'Elite',
-        tips: ['Build with holds and negatives', 'Every muscle tight']
-      }
-    ]
-  }
 ];
 
-export const workoutTemplates = [
+export const workoutTemplates: WorkoutTemplate[] = [
   {
-    id: 'push-day',
-    name: 'Push Day',
-    description: 'Focus on pushing movements like push-ups, dips, and handstands',
+    id: 'full-body-workout-1',
+    name: 'Full Body Workout 1',
+    description: 'A basic full body workout.',
     exercises: [
-      {
-        id: '1',
-        exerciseId: 'push-ups',
-        name: 'Push-ups',
-        progressionId: 'push-ups',
-        targetSets: 3,
-        targetReps: 10
-      },
-      {
-        id: '2',
-        exerciseId: 'dips',
-        name: 'Dips',
-        progressionId: 'dips',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '3',
-        exerciseId: 'pike-push-ups',
-        name: 'Pike Push-ups',
-        progressionId: 'handstand',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '4',
-        exerciseId: 'pseudo-planche-pushups',
-        name: 'Pseudo Planche Push-ups',
-        progressionId: 'planche',
-        targetSets: 3,
-        targetReps: 5
-      }
-    ]
+      { exerciseId: 'standard-push-up-1', name: 'Push-Up', progressionId: 'push-up-progression' },
+      { exerciseId: 'bodyweight-squat-1', name: 'Bodyweight Squat', progressionId: 'squat-progression' },
+      { exerciseId: 'inverted-row-1', name: 'Inverted Row', progressionId: 'pull-up-progression' },
+    ],
   },
   {
-    id: 'pull-day',
-    name: 'Pull Day',
-    description: 'Focus on pulling movements like pull-ups and front lever work',
+    id: 'upper-body-workout-1',
+    name: 'Upper Body Workout 1',
+    description: 'An upper body focused workout.',
     exercises: [
-      {
-        id: '1',
-        exerciseId: 'pull-ups',
-        name: 'Pull-ups',
-        progressionId: 'pull-ups',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '2',
-        exerciseId: 'tuck-front-lever',
-        name: 'Tuck Front Lever',
-        progressionId: 'front-lever',
-        targetSets: 3,
-        targetDuration: 10
-      },
-      {
-        id: '3',
-        exerciseId: 'hanging-knee-raises',
-        name: 'Hanging Knee Raises',
-        progressionId: 'front-lever',
-        targetSets: 3,
-        targetReps: 10
-      }
-    ]
+      { exerciseId: 'standard-push-up-1', name: 'Push-Up', progressionId: 'push-up-progression' },
+      { exerciseId: 'inverted-row-1', name: 'Inverted Row', progressionId: 'pull-up-progression' },
+    ],
   },
   {
-    id: 'legs-day',
-    name: 'Legs Day',
-    description: 'Focus on lower body calisthenics',
+    id: 'lower-body-workout-1',
+    name: 'Lower Body Workout 1',
+    description: 'A lower body focused workout.',
     exercises: [
-      {
-        id: '1',
-        exerciseId: 'air-squats',
-        name: 'Air Squats',
-        progressionId: 'squats',
-        targetSets: 3,
-        targetReps: 15
-      },
-      {
-        id: '2',
-        exerciseId: 'bulgarian-split-squats',
-        name: 'Bulgarian Split Squats',
-        progressionId: 'squats',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '3',
-        exerciseId: 'shrimp-squats',
-        name: 'Shrimp Squats',
-        progressionId: 'squats',
-        targetSets: 3,
-        targetReps: 5
-      }
-    ]
+      { exerciseId: 'bodyweight-squat-1', name: 'Bodyweight Squat', progressionId: 'squat-progression' },
+    ],
   },
-  {
-    id: 'full-body',
-    name: 'Full Body Workout',
-    description: 'Complete full body calisthenics routine',
-    exercises: [
-      {
-        id: '1',
-        exerciseId: 'pull-ups',
-        name: 'Pull-ups',
-        progressionId: 'pull-ups',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '2',
-        exerciseId: 'push-ups',
-        name: 'Push-ups',
-        progressionId: 'push-ups',
-        targetSets: 3,
-        targetReps: 10
-      },
-      {
-        id: '3',
-        exerciseId: 'dips',
-        name: 'Dips',
-        progressionId: 'dips',
-        targetSets: 3,
-        targetReps: 8
-      },
-      {
-        id: '4',
-        exerciseId: 'air-squats',
-        name: 'Air Squats',
-        progressionId: 'squats',
-        targetSets: 3,
-        targetReps: 15
-      },
-      {
-        id: '5',
-        exerciseId: 'tuck-front-lever',
-        name: 'Tuck Front Lever',
-        progressionId: 'front-lever',
-        targetSets: 3,
-        targetDuration: 10
-      }
-    ]
-  }
 ];
 
-export function getExerciseById(exerciseId: string): ProgressionStep | undefined {
-  for (const progression of progressions) {
-    const exercise = progression.steps.find(step => step.id === exerciseId);
-    if (exercise) {
-      return exercise;
-    }
-  }
-  return undefined;
-}
-
-export function getProgressionById(progressionId: string): ProgressionPath | undefined {
-  return progressions.find(progression => progression.id === progressionId);
-}
-
-export function getProgressionForExercise(exerciseId: string): ProgressionPath | undefined {
-  for (const progression of progressions) {
-    if (progression.steps.some(step => step.id === exerciseId)) {
-      return progression;
-    }
-  }
-  return undefined;
-}
-
-export function getWorkoutTemplate(templateId: string) {
+export const getWorkoutTemplate = (templateId: string): WorkoutTemplate | undefined => {
   return workoutTemplates.find(template => template.id === templateId);
-}
+};
 
-export function getAllExercises(): ProgressionStep[] {
-  const allExercises: ProgressionStep[] = [];
-  progressions.forEach(progression => {
-    progression.steps.forEach(step => {
-      allExercises.push(step);
-    });
-  });
-  return allExercises;
-}
+export const getExerciseById = (id: string) => {
+  // Search through all exercise lists in all progressions
+  for (const progression of progressions) {
+    for (const path of progression.paths) {
+      for (const level of path.levels) {
+        if (level.id === id) {
+          return level;
+        }
+      }
+    }
+  }
+  return undefined;
+};
+
+// Replace any occurrences of ProgressionStep with ProgressionPath
+// For example:
+export const getCurrentProgressionLevel = (progressionId: string, exerciseId: string): ProgressionPath | undefined => {
+  const progression = progressions.find(p => p.id === progressionId);
+  if (!progression) return undefined;
+  
+  for (const path of progression.paths) {
+    const level = path.levels.find(l => l.id === exerciseId);
+    if (level) return path;
+  }
+  
+  return undefined;
+};
