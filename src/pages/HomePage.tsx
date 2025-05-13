@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { Card } from '@/components/ui/card';
 import { useWorkout } from '../context/WorkoutContext';
 import { useProgression } from '../context/ProgressionContext';
-import { progressions, getProgressionById } from '../data/progressions';
+import { getProgressionById, convertToProgressionPaths } from '../data/progressions';
 import { Button } from '@/components/ui/button';
 import { Dumbbell, Clock, Plus, Calendar } from 'lucide-react';
 

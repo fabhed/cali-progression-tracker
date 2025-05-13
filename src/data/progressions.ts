@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
+import { ProgressionPath as AppProgressionPath, ProgressionStep } from '../types';
 
 export interface Progression {
   id: string;
   name: string;
   description: string;
+  category: string;  // Added category to match expected type
   paths: ProgressionPath[];
 }
 
@@ -22,6 +24,7 @@ export interface Exercise {
   focus?: string[];
   muscles?: string[];
   equipment?: string[];
+  difficulty?: string;
 }
 
 export interface WorkoutTemplate {
@@ -32,6 +35,10 @@ export interface WorkoutTemplate {
     exerciseId: string;
     name: string;
     progressionId?: string;
+    id: string;  // Added to match type definition
+    targetSets: number;  // Added to match type definition
+    targetReps?: number;  // Added to match type definition
+    targetDuration?: number;  // Added to match type definition
   }[];
 }
 
@@ -41,6 +48,7 @@ export const progressions: Progression[] = [
     id: 'push-up-progression',
     name: 'Push-Up Progression',
     description: 'A progression to learn and master the push-up.',
+    category: 'Upper Body',  // Added category field
     paths: [
       {
         id: 'incline-push-ups',
@@ -169,6 +177,7 @@ export const progressions: Progression[] = [
     id: 'squat-progression',
     name: 'Squat Progression',
     description: 'A progression to learn and master the squat.',
+    category: 'Lower Body',  // Added category field
     paths: [
       {
         id: 'assisted-squats',
@@ -283,6 +292,7 @@ export const progressions: Progression[] = [
     id: 'pull-up-progression',
     name: 'Pull-Up Progression',
     description: 'A progression to learn and master the pull-up.',
+    category: 'Upper Body',  // Added category field
     paths: [
       {
         id: 'vertical-pulls',
@@ -398,9 +408,30 @@ export const workoutTemplates: WorkoutTemplate[] = [
     name: 'Full Body Workout 1',
     description: 'A basic full body workout.',
     exercises: [
-      { exerciseId: 'standard-push-up-1', name: 'Push-Up', progressionId: 'push-up-progression' },
-      { exerciseId: 'bodyweight-squat-1', name: 'Bodyweight Squat', progressionId: 'squat-progression' },
-      { exerciseId: 'inverted-row-1', name: 'Inverted Row', progressionId: 'pull-up-progression' },
+      { 
+        id: uuidv4(),
+        exerciseId: 'standard-push-up-1', 
+        name: 'Push-Up', 
+        progressionId: 'push-up-progression',
+        targetSets: 3,
+        targetReps: 10
+      },
+      { 
+        id: uuidv4(),
+        exerciseId: 'bodyweight-squat-1', 
+        name: 'Bodyweight Squat', 
+        progressionId: 'squat-progression',
+        targetSets: 3,
+        targetReps: 15
+      },
+      { 
+        id: uuidv4(),
+        exerciseId: 'inverted-row-1', 
+        name: 'Inverted Row', 
+        progressionId: 'pull-up-progression',
+        targetSets: 3,
+        targetReps: 8
+      },
     ],
   },
   {
@@ -408,8 +439,22 @@ export const workoutTemplates: WorkoutTemplate[] = [
     name: 'Upper Body Workout 1',
     description: 'An upper body focused workout.',
     exercises: [
-      { exerciseId: 'standard-push-up-1', name: 'Push-Up', progressionId: 'push-up-progression' },
-      { exerciseId: 'inverted-row-1', name: 'Inverted Row', progressionId: 'pull-up-progression' },
+      { 
+        id: uuidv4(),
+        exerciseId: 'standard-push-up-1', 
+        name: 'Push-Up', 
+        progressionId: 'push-up-progression',
+        targetSets: 4,
+        targetReps: 12
+      },
+      { 
+        id: uuidv4(),
+        exerciseId: 'inverted-row-1', 
+        name: 'Inverted Row', 
+        progressionId: 'pull-up-progression',
+        targetSets: 4,
+        targetReps: 10
+      },
     ],
   },
   {
@@ -417,7 +462,14 @@ export const workoutTemplates: WorkoutTemplate[] = [
     name: 'Lower Body Workout 1',
     description: 'A lower body focused workout.',
     exercises: [
-      { exerciseId: 'bodyweight-squat-1', name: 'Bodyweight Squat', progressionId: 'squat-progression' },
+      { 
+        id: uuidv4(),
+        exerciseId: 'bodyweight-squat-1', 
+        name: 'Bodyweight Squat', 
+        progressionId: 'squat-progression',
+        targetSets: 4,
+        targetReps: 15
+      },
     ],
   },
 ];
@@ -440,8 +492,84 @@ export const getExerciseById = (id: string) => {
   return undefined;
 };
 
-// Replace any occurrences of ProgressionStep with ProgressionPath
-// For example:
+// Added function to get all exercises for drop-down lists
+export const getAllExercises = (): Exercise[] => {
+  const exercises: Exercise[] = [];
+  
+  for (const progression of progressions) {
+    for (const path of progression.paths) {
+      for (const level of path.levels) {
+        exercises.push({
+          ...level,
+          difficulty: path.name // Using path name as difficulty level
+        });
+      }
+    }
+  }
+  
+  return exercises;
+};
+
+// Added function to get progression by ID
+export const getProgressionById = (progressionId: string): AppProgressionPath | undefined => {
+  const progression = progressions.find(p => p.id === progressionId);
+  if (!progression) return undefined;
+  
+  // Convert from internal progression format to app progression format
+  const steps: ProgressionStep[] = [];
+  for (const path of progression.paths) {
+    for (const level of path.levels) {
+      steps.push({
+        id: level.id,
+        name: level.name,
+        description: level.description,
+        difficulty: path.name as any, // Using path name as difficulty
+        image: undefined,
+        videoUrl: level.videoUrl,
+        tips: level.focus
+      });
+    }
+  }
+  
+  return {
+    id: progression.id,
+    name: progression.name,
+    category: progression.category,
+    description: progression.description,
+    steps: steps
+  };
+};
+
+// Convert progressions for UI display
+export const convertToProgressionPaths = (): AppProgressionPath[] => {
+  return progressions.map(progression => {
+    // Convert from internal progression format to app progression format
+    const steps: ProgressionStep[] = [];
+    for (const path of progression.paths) {
+      for (const level of path.levels) {
+        steps.push({
+          id: level.id,
+          name: level.name,
+          description: level.description,
+          difficulty: path.name as any, // Using path name as difficulty
+          image: undefined,
+          videoUrl: level.videoUrl,
+          tips: level.focus
+        });
+      }
+    }
+    
+    return {
+      id: progression.id,
+      name: progression.name,
+      category: progression.category,
+      description: progression.description,
+      steps: steps
+    };
+  });
+};
+
+// Replace existing function with modified version that uses the updated types
 export const getCurrentProgressionLevel = (progressionId: string, exerciseId: string): ProgressionPath | undefined => {
   const progression = progressions.find(p => p.id === progressionId);
   if (!progression) return undefined;

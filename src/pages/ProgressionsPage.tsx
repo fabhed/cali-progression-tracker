@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
@@ -9,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { progressions, getProgressionById } from '../data/progressions';
+import { getProgressionById, convertToProgressionPaths } from '../data/progressions';
 import { ProgressionPath, ProgressionStep } from '../types';
 import { ChevronRight, Star, Info } from 'lucide-react';
 
@@ -19,10 +18,13 @@ const ProgressionsPage: React.FC = () => {
   
   const [selectedProgression, setSelectedProgression] = useState<ProgressionPath | null>(null);
   
+  // Use the new converter function to get progressions in the right format
+  const progressionPaths = convertToProgressionPaths();
+  
   // Group progressions by category
   const progressionsByCategory: Record<string, ProgressionPath[]> = {};
   
-  progressions.forEach(progression => {
+  progressionPaths.forEach(progression => {
     if (!progressionsByCategory[progression.category]) {
       progressionsByCategory[progression.category] = [];
     }

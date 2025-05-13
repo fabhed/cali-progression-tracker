@@ -20,7 +20,23 @@ const StartWorkoutPage: React.FC = () => {
   const handleStartTemplateWorkout = (templateId: string) => {
     const template = workoutTemplates.find(t => t.id === templateId);
     if (template) {
-      startWorkout(template);
+      // Convert from data template to app template format
+      const convertedTemplate = {
+        id: template.id,
+        name: template.name,
+        description: template.description,
+        exercises: template.exercises.map(ex => ({
+          id: ex.id,
+          exerciseId: ex.exerciseId,
+          name: ex.name,
+          progressionId: ex.progressionId,
+          targetSets: ex.targetSets,
+          targetReps: ex.targetReps,
+          targetDuration: ex.targetDuration
+        }))
+      };
+      
+      startWorkout(convertedTemplate);
       navigate('/active-workout');
     }
   };
